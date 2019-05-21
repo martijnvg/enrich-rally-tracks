@@ -95,7 +95,7 @@
             "operation": {
                 "name": "create-enrich-pipeline",
                 "operation-type": "put-pipeline",
-                "id": "my_pipeline",
+                "id": "enrich",
                 "body": {
                     "processors": [
                         {
@@ -136,7 +136,24 @@
         },
         {
             "operation": {
-                "name": "create-messages-index",
+                "name": "create-noop-processor",
+                "operation-type": "put-pipeline",
+                "id": "noop",
+                "body": {
+                    "processors": [
+                        {
+                            "uppercase": {
+                                "field": "doesnotexist",
+                                "ignore_missing": true
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "operation": {
+                "name": "create-messages-index1",
                 "operation-type": "create-index",
                 "index": "messages",
                 "request-params": {
@@ -146,10 +163,38 @@
         },
         {
             "operation": {
-                "name": "insert-messages",
+                "name": "insert-messages-with-noop-pipeline",
                 "operation-type": "bulk",
                 "bulk-size": 5000,
-                "pipeline": "my_pipeline",
+                "pipeline": "noop",
+                "corpora": "messages"
+            },
+            "warmup-time-period": 1,
+            "clients": 2
+        },
+        {
+            "operation": {
+                "name": "delete-messages-indices",
+                "operation-type": "delete-index",
+                "index": "messages"
+            }
+        },
+        {
+            "operation": {
+                "name": "create-messages-index2",
+                "operation-type": "create-index",
+                "index": "messages",
+                "request-params": {
+                    "wait_for_active_shards": 1
+                }
+            }
+        },
+        {
+            "operation": {
+                "name": "insert-messages-with-enrich-pipeline",
+                "operation-type": "bulk",
+                "bulk-size": 5000,
+                "pipeline": "enrich",
                 "corpora": "messages"
             },
             "warmup-time-period": 1,
