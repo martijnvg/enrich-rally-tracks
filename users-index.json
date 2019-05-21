@@ -1,0 +1,48 @@
+{
+    "settings": {
+        "index.number_of_replicas": 0
+    },
+    "mappings": {
+        "docs": {
+            "dynamic": "strict",
+            "properties": {
+                "first_name": {
+                    "type": "text"
+                },
+                "last_name": {
+                    "type": "text"
+                },
+                "company_name": {
+                    "type": "text"
+                },
+                "address": {
+                    "type": "text"
+                },
+                "city": {
+                    "type": "text"
+                },
+                "country": {
+                    "type": "text"
+                },
+                "state": {
+                    "type": "text"
+                },
+                "zip": {
+                    "type": "text"
+                },
+                "phone1": {
+                    "type": "text"
+                },
+                "phone2": {
+                    "type": "text"
+                },
+                "web": {
+                    "type": "text"
+                },
+                "email": {
+                    "type": "text"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,161 @@
+{
+    "version": 2,
+    "description": "Enrich processor benchmark for Rally",
+    "indices": [
+        {
+            "name": "users",
+            "body": "users-index.json"
+        },
+        {
+            "name": "messages",
+            "body": "messages-index.json"
+        }
+    ],
+    "corpora": [
+        {
+            "name": "users",
+            "documents": [
+                {
+                    "source-file": "users-documents.json",
+                    "document-count": 50000,
+                    "uncompressed-bytes": 16178001,
+                    "target-index": "users"
+                }                
+            ]
+        },
+        {
+            "name": "messages",
+            "documents": [
+                {
+                    "source-file": "random-messages-documents.json",
+                    "document-count": 250000,
+                    "uncompressed-bytes": 24399400,
+                    "target-index": "messages"
+                }
+            ]
+        }
+    ],
+    "schedule": [
+        {
+            "operation": {
+                "name": "delete-all-indices",
+                "operation-type": "delete-index"
+            }
+        },
+        {
+            "operation": {
+                "name": "create-users-index",
+                "operation-type": "create-index",
+                "index": "users",
+                "request-params": {
+                    "wait_for_active_shards": "true"
+                }
+            }
+        },
+        {
+            "operation": {
+                "name": "insert-users",
+                "operation-type": "bulk",
+                "bulk-size": 5000,
+                "corpora": "users",
+                "include-in-reporting": false
+            },
+            "warmup-time-period": 1,
+            "clients": 2
+        },
+        {
+            "operation": {
+                "name": "create-enrich-policy",
+                "operation-type": "create-policy",
+                "policy-name": "my_policy",
+                "body": {
+                    "type": "exact_match",
+                    "indices": "users",
+                    "enrich_key": "email",
+                    "enrich_values": [
+                        "first_name",
+                        "last_name",
+                        "address",
+                        "city",
+                        "zip",
+                        "state"
+                    ]
+                },
+                "include-in-reporting": false
+            }
+        },
+        {
+            "operation": {
+                "name": "execute-enrich-policy",
+                "operation-type": "execute-policy",
+                "policy-name": "my_policy"
+            }
+        },
+        {
+            "operation": {
+                "name": "create-pipeline",
+                "operation-type": "put-pipeline",
+                "id": "my_pipeline",
+                "body": {
+                    "processors": [
+                        {
+                            "enrich": {
+                                "enrich" : {
+                                    "policy_name": "my-policy",
+                                    "enrich_values": [
+                                        {
+                                            "source": "first_name",
+                                            "target": "first_name"
+                                        },
+                                        {
+                                            "source": "last_name",
+                                            "target": "last_name"
+                                        },
+                                        {
+                                            "source": "address",
+                                            "target": "address"
+                                        },
+                                        {
+                                            "source": "city",
+                                            "target": "city"
+                                        },
+                                        {
+                                            "source": "state",
+                                            "target": "state"
+                                        },
+                                        {
+                                            "source": "zip",
+                                            "target": "zip_code"
+                                        }
+                                    ],
+                                    "enrich_key": "email"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "operation": {
+                "name": "create-messages-index",
+                "operation-type": "create-index",
+                "index": "messages",
+                "request-params": {
+                    "wait_for_active_shards": "true"
+                }
+            }
+        },
+        {
+            "operation": {
+                "name": "insert-messages",
+                "operation-type": "bulk",
+                "bulk-size": 5000,
+                "pipeline": "my_pipeline",
+                "corpora": "messages"
+            },
+            "warmup-time-period": 1,
+            "clients": 2
+        }
+    ]
+}
