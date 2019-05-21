@@ -3,18 +3,15 @@
         "index.number_of_replicas": 0
     },
     "mappings": {
-        "docs": {
-            "dynamic": "strict",
-            "properties": {
-                "email": {
-                    "type": "keyword"
-                },
-                "message": {
-                    "type": "text"
-                },
-                "received_at": {
-                    "type": "date"
-                }
+        "properties": {
+            "email": {
+                "type": "keyword"
+            },
+            "message": {
+                "type": "text"
+            },
+            "received_at": {
+                "type": "date"
             }
         }
     }

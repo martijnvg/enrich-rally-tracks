@@ -20,7 +20,7 @@
                     "document-count": 50000,
                     "uncompressed-bytes": 16178001,
                     "target-index": "users"
-                }                
+                }
             ]
         },
         {
@@ -48,7 +48,7 @@
                 "operation-type": "create-index",
                 "index": "users",
                 "request-params": {
-                    "wait_for_active_shards": "true"
+                    "wait_for_active_shards": 1
                 }
             }
         },
@@ -93,43 +93,41 @@
         },
         {
             "operation": {
-                "name": "create-pipeline",
+                "name": "create-enrich-pipeline",
                 "operation-type": "put-pipeline",
                 "id": "my_pipeline",
                 "body": {
                     "processors": [
                         {
                             "enrich": {
-                                "enrich" : {
-                                    "policy_name": "my-policy",
-                                    "enrich_values": [
-                                        {
-                                            "source": "first_name",
-                                            "target": "first_name"
-                                        },
-                                        {
-                                            "source": "last_name",
-                                            "target": "last_name"
-                                        },
-                                        {
-                                            "source": "address",
-                                            "target": "address"
-                                        },
-                                        {
-                                            "source": "city",
-                                            "target": "city"
-                                        },
-                                        {
-                                            "source": "state",
-                                            "target": "state"
-                                        },
-                                        {
-                                            "source": "zip",
-                                            "target": "zip_code"
-                                        }
-                                    ],
-                                    "enrich_key": "email"
-                                }
+                                "policy_name": "my_policy",
+                                "enrich_values": [
+                                    {
+                                        "source": "first_name",
+                                        "target": "first_name"
+                                    },
+                                    {
+                                        "source": "last_name",
+                                        "target": "last_name"
+                                    },
+                                    {
+                                        "source": "address",
+                                        "target": "address"
+                                    },
+                                    {
+                                        "source": "city",
+                                        "target": "city"
+                                    },
+                                    {
+                                        "source": "state",
+                                        "target": "state"
+                                    },
+                                    {
+                                        "source": "zip",
+                                        "target": "zip_code"
+                                    }
+                                ],
+                                "enrich_key": "email"
                             }
                         }
                     ]
@@ -142,7 +140,7 @@
                 "operation-type": "create-index",
                 "index": "messages",
                 "request-params": {
-                    "wait_for_active_shards": "true"
+                    "wait_for_active_shards": 1
                 }
             }
         },
