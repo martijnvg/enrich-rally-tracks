@@ -33,6 +33,17 @@
                     "target-index": "messages"
                 }
             ]
+        },
+        {
+            "name": "messages-50k",
+            "documents": [
+                {
+                    "source-file": "messages-documents-50k.json",
+                    "document-count": 50000,
+                    "uncompressed-bytes": 4879880,
+                    "target-index": "messages"
+                }
+            ]
         }
     ],
     "schedule": [
@@ -163,6 +174,16 @@
         },
         {
             "operation": {
+                "name": "insert-messages-with-noop-pipeline-warmup",
+                "operation-type": "bulk",
+                "bulk-size": 5000,
+                "pipeline": "noop",
+                "corpora": "messages-50k",
+                "include-in-reporting": false
+            }
+        },
+        {
+            "operation": {
                 "name": "insert-messages-with-noop-pipeline",
                 "operation-type": "bulk",
                 "bulk-size": 5000,
@@ -187,6 +208,16 @@
                 "request-params": {
                     "wait_for_active_shards": 1
                 }
+            }
+        },
+        {
+            "operation": {
+                "name": "insert-messages-with-enrich-pipeline-warmup",
+                "operation-type": "bulk",
+                "bulk-size": 5000,
+                "pipeline": "enrich",
+                "corpora": "messages-50k",
+                "include-in-reporting": false
             }
         },
         {
