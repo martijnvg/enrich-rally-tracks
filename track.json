@@ -80,17 +80,18 @@
                 "operation-type": "create-policy",
                 "policy-name": "my_policy",
                 "body": {
-                    "type": "exact_match",
-                    "indices": "users",
-                    "enrich_key": "email",
-                    "enrich_values": [
-                        "first_name",
-                        "last_name",
-                        "address",
-                        "city",
-                        "zip",
-                        "state"
-                    ]
+                    "match": {
+                        "indices": "users",
+                        "match_field": "email",
+                        "enrich_fields": [
+                            "first_name",
+                            "last_name",
+                            "address",
+                            "city",
+                            "zip",
+                            "state"
+                        ]
+                    }
                 },
                 "include-in-reporting": false
             }
@@ -112,33 +113,8 @@
                         {
                             "enrich": {
                                 "policy_name": "my_policy",
-                                "enrich_values": [
-                                    {
-                                        "source": "first_name",
-                                        "target": "first_name"
-                                    },
-                                    {
-                                        "source": "last_name",
-                                        "target": "last_name"
-                                    },
-                                    {
-                                        "source": "address",
-                                        "target": "address"
-                                    },
-                                    {
-                                        "source": "city",
-                                        "target": "city"
-                                    },
-                                    {
-                                        "source": "state",
-                                        "target": "state"
-                                    },
-                                    {
-                                        "source": "zip",
-                                        "target": "zip_code"
-                                    }
-                                ],
-                                "enrich_key": "email"
+                                "target_field": "user",
+                                "field": "email"
                             }
                         }
                     ]
